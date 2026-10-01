@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History & Results</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 25px; }
+        
+        .date-selector { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px; }
+        .date-btn { background: #1e293b; color: #94a3b8; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #334155; white-space: nowrap; }
+        .date-btn.active, .date-btn:hover { background: #0284c7; color: #ffffff; border-color: #38bdf8; }
+
+        .summary-card { display: flex; justify-content: space-around; background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #334155; }
+        .stat-box { text-align: center; }
+        .stat-box .number { font-size: 24px; font-weight: bold; margin-top: 5px; }
+        .text-green { color: #4ade80; }
+        .text-red { color: #f87171; }
+        .text-yellow { color: #facc15; }
+
+        table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; }
+        th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #334155; }
+        th { background: #0f172a; color: #94a3b8; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; }
+
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; }
+        .badge-won { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid #4ade80; }
+        .badge-lose { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid #f87171; }
+        .badge-pending { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
+		
+		
+		
+		
+		/* Mobile & Tablet Responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px !important;
+    }
+
+    h1 {
+        font-size: 1.4rem !important;
+    }
+
+    /* Summary Card Grid Adjustment */
+    .summary-card {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px !important;
+        padding: 15px !important;
+    }
+
+    .stat-box .number {
+        font-size: 18px !important;
+    }
+
+    /* Scrollable Table on Small Screens */
+    table {
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+    }
+
+    th, td {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+    }
+}
+		
+		
+		
+		
+    </style>
+</head>
+<body>
+   <div class="container">
+    <h1>📊 Daily Match Prediction History</h1>
+
+    <!-- Dynamic Date Selector Navigation (UPDATED TO STICKY) -->
+    <div class="date-selector" style="position: sticky; top: 0; z-index: 1000; background-color: #0f172a; padding-top: 10px;">
+        {% if week_dates %}
+            {% for date_key in week_dates %}
+                <a href="/history?date={{ date_key }}" class="date-btn {% if date_key == selected_date %}active{% endif %}">
+                    {{ date_key }}
+                </a>
+            {% endfor %}
+        {% else %}
+            {% for date_key in history.keys() %}
+                <a href="/history?date={{ date_key }}" class="date-btn {% if date_key == selected_date %}active{% endif %}">
+                    {{ date_key }}
+                </a>
+            {% endfor %}
+        {% endif %}
+        <a href="/" style="background-color: #0284c7; color: white; padding: 6px 14px; font-size: 16px; border-radius: 6px; text-decoration: none; margin-left: 15px; vertical-align: middle;">
+            HOME
+        </a>
+    </div>
+
+        {% if day_data and day_data.matches %}
+            <!-- Day Summary Stats -->
+            <div class="summary-card">
+                <div class="stat-box">
+                    <div>Total Matches</div>
+                    <div class="number">
+                        {{ day_data.summary.total if day_data.summary else (day_data.total_matches if day_data.total_matches is defined else day_data.matches|length) }}
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div>Won</div>
+                    <div class="number text-green">
+                        ✓ {{ day_data.summary.won if day_data.summary else (day_data.won_count if day_data.won_count is defined else 0) }}
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div>Lost</div>
+                    <div class="number text-red">
+                        ✗ {{ day_data.summary.lost if day_data.summary else (day_data.lost_count if day_data.lost_count is defined else 0) }}
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div>Pending</div>
+                    <div class="number text-yellow">
+                        ⏳ {{ day_data.summary.pending if day_data.summary else (day_data.pending_count if day_data.pending_count is defined else day_data.matches|length) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matches Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fixture</th>
+                        <th>Prediction</th>
+                        <th>Score</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in day_data.matches %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><strong>{{ match.home_team }}</strong> vs <strong>{{ match.away_team }}</strong></td>
+                            <td><span style="color: #38bdf8;">{{ match.predicted_outcome }}</span></td>
+                            <td>{{ match.score if match.score else (match.actual_score if match.actual_score else '-') }}</td>
+                            <td>
+                                {% set res_status = match.result if match.result else match.status %}
+                                {% if res_status == 'WON' %}
+                                    <span class="badge badge-won">✓ WON</span>
+                                {% elif res_status == 'LOST' or res_status == 'LOSE' %}
+                                    <span class="badge badge-lose">✗ LOST</span>
+                                {% else %}
+                                    <span class="badge badge-pending">⏳ PENDING</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="text-align: center; color: #94a3b8; margin-top: 40px;">No predictions recorded for {{ selected_date }}.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

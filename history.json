@@ -1,0 +1,540 @@
+{
+    "2026-09-30": {
+        "matches": [
+            {
+                "match_id": "1629001",
+                "home_team": "Mexico",
+                "away_team": "Peru",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1642010",
+                "home_team": "Korea Republic U23",
+                "away_team": "China PR U23",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1640069",
+                "home_team": "Poland U17",
+                "away_team": "Georgia U17",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1642976",
+                "home_team": "Sweden U19",
+                "away_team": "Czechia U19",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1640262",
+                "home_team": "East Bengal II",
+                "away_team": "Minerva Punjab",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1550632",
+                "home_team": "San Antonio",
+                "away_team": "SV Darmstadt 98",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1629002",
+                "home_team": "USA",
+                "away_team": "Chile",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1549719",
+                "home_team": "Independiente Medellin",
+                "away_team": "Millonarios",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1642973",
+                "home_team": "Finland U19",
+                "away_team": "Germany U19",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1642974",
+                "home_team": "Republic of Ireland U17",
+                "away_team": "Czechia U17",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1640417",
+                "home_team": "Khovd",
+                "away_team": "Ulaanbaatar",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1640509",
+                "home_team": "Papua New Guinea",
+                "away_team": "Solomon Islands",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1642975",
+                "home_team": "Scotland U19",
+                "away_team": "Ukraine U19",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1632351",
+                "home_team": "South Korea U18",
+                "away_team": "England U18",
+                "predicted_outcome": "South Korea U18 DNB"
+            },
+            {
+                "match_id": "1639966",
+                "home_team": "Belize",
+                "away_team": "St. Vincent / Grenadines",
+                "predicted_outcome": "Belize DNB"
+            },
+            {
+                "match_id": "1640510",
+                "home_team": "Fiji",
+                "away_team": "New Caledonia",
+                "predicted_outcome": "Fiji DNB"
+            },
+            {
+                "match_id": "1642893",
+                "home_team": "Arges Pitesti",
+                "away_team": "Cetate Deva",
+                "predicted_outcome": "Arges Pitesti DNB"
+            },
+            {
+                "match_id": "1641712",
+                "home_team": "Timor-Leste",
+                "away_team": "Cambodia",
+                "predicted_outcome": "Timor-Leste Win"
+            },
+            {
+                "match_id": "1619694",
+                "home_team": "Aurora",
+                "away_team": "San Antonio Bulo Bulo",
+                "predicted_outcome": "Aurora Win"
+            },
+            {
+                "match_id": "1640418",
+                "home_team": "Ulaangom City",
+                "away_team": "Hunters",
+                "predicted_outcome": "Ulaangom City Win"
+            }
+        ],
+        "summary": {
+            "total": 20,
+            "won": 0,
+            "lost": 0,
+            "pending": 20
+        }
+    },
+    "2026-10-01": {
+        "matches": [
+            {
+                "match_id": "1640419",
+                "home_team": "Khovd Western",
+                "away_team": "Deren",
+                "predicted_outcome": "Over 0.5 HT Goals",
+                "score": "1 - 5",
+                "result": "WON"
+            },
+            {
+                "match_id": "1632353",
+                "home_team": "Panama",
+                "away_team": "New Zealand",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1640436",
+                "home_team": "Erchim",
+                "away_team": "Central Stallions",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1640071",
+                "home_team": "Cook Islands",
+                "away_team": "Tahiti",
+                "predicted_outcome": "BTTS Yes",
+                "score": "3 - 2",
+                "result": "WON"
+            },
+            {
+                "match_id": "1600614",
+                "home_team": "Alianza",
+                "away_team": "Platense",
+                "predicted_outcome": "BTTS Yes",
+                "score": "2 - 1",
+                "result": "WON"
+            },
+            {
+                "match_id": "1643204",
+                "home_team": "Alianza Lima",
+                "away_team": "Palestino",
+                "predicted_outcome": "Over 2.5 Goals",
+                "score": "1 - 2",
+                "result": "WON"
+            },
+            {
+                "match_id": "1637963",
+                "home_team": "Shatin",
+                "away_team": "Hong Kong FC",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1642983",
+                "home_team": "Slovakia U19",
+                "away_team": "Switzerland U19",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1640511",
+                "home_team": "Argentina",
+                "away_team": "Bolivia",
+                "predicted_outcome": "Over 2.5 Goals",
+                "score": "4 - 0",
+                "result": "WON"
+            },
+            {
+                "match_id": "1600615",
+                "home_team": "FAS",
+                "away_team": "Isidro Metap\u00e1n",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1642984",
+                "home_team": "France U19",
+                "away_team": "Turkey U19",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1643205",
+                "home_team": "Olimpija Ljubljana",
+                "away_team": "NK Slaven Belupo",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1643339",
+                "home_team": "Japan",
+                "away_team": "Ecuador",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1638595",
+                "home_team": "Venezuela U17",
+                "away_team": "England U17",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1619697",
+                "home_team": "Oriente Petrolero",
+                "away_team": "The Strongest",
+                "predicted_outcome": "Oriente Petrolero Win",
+                "score": "1 - 1",
+                "result": "LOST"
+            },
+            {
+                "match_id": "1493720",
+                "home_team": "Sacramento Republic",
+                "away_team": "Las Vegas Lights",
+                "predicted_outcome": "Sacramento Republic Win",
+                "score": "3 - 2",
+                "result": "WON"
+            },
+            {
+                "match_id": "1493717",
+                "home_team": "FC Tulsa",
+                "away_team": "New Mexico United",
+                "predicted_outcome": "BTTS Yes",
+                "score": "1 - 0",
+                "result": "LOST"
+            },
+            {
+                "match_id": "1549703",
+                "home_team": "Atletico Nacional",
+                "away_team": "Junior",
+                "predicted_outcome": "Atletico Nacional Win",
+                "score": "3 - 1",
+                "result": "WON"
+            },
+            {
+                "match_id": "1640072",
+                "home_team": "Poland U19",
+                "away_team": "Kazakhstan U19",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1637962",
+                "home_team": "North District",
+                "away_team": "Southern District",
+                "predicted_outcome": "North District Win"
+            }
+        ],
+        "summary": {
+            "total": 20,
+            "won": 7,
+            "lost": 2,
+            "pending": 11
+        }
+    },
+    "2026-09-29": {
+        "matches": [
+            {
+                "match_id": "1640226",
+                "home_team": "Dhaka Wanderers",
+                "away_team": "Bashundhara Kings",
+                "predicted_outcome": "Dhaka Wanderers Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1583654",
+                "home_team": "Australia",
+                "away_team": "Brazil",
+                "predicted_outcome": "Australia Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1632085",
+                "home_team": "Portugal U20",
+                "away_team": "Switzerland U20",
+                "predicted_outcome": "Portugal U20 Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1638186",
+                "home_team": "Ehime FC",
+                "away_team": "FC Tokyo",
+                "predicted_outcome": "Ehime FC Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1583776",
+                "home_team": "Alianza FC",
+                "away_team": "Independiente de La Chorrera",
+                "predicted_outcome": "Alianza FC Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1639961",
+                "home_team": "Guatemala",
+                "away_team": "El Salvador",
+                "predicted_outcome": "Guatemala Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1635980",
+                "home_team": "Jaguares de Chiapas",
+                "away_team": "Racing de Veracruz",
+                "predicted_outcome": "Jaguares de Chiapas Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1632086",
+                "home_team": "France U20",
+                "away_team": "England U20",
+                "predicted_outcome": "France U20 Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1639958",
+                "home_team": "Jamaica",
+                "away_team": "Honduras",
+                "predicted_outcome": "Jamaica Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1601444",
+                "home_team": "Cariari Pococi",
+                "away_team": "CS Uruguay",
+                "predicted_outcome": "Cariari Pococi Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1641081",
+                "home_team": "Papua New Guinea W",
+                "away_team": "Solomon Islands W",
+                "predicted_outcome": "Papua New Guinea W Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1641082",
+                "home_team": "Fiji W",
+                "away_team": "New Caledonia W",
+                "predicted_outcome": "Fiji W Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1640263",
+                "home_team": "ATK Mohun Bagan",
+                "away_team": "NorthEast United",
+                "predicted_outcome": "ATK Mohun Bagan Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1641710",
+                "home_team": "Philippines",
+                "away_team": "Pakistan",
+                "predicted_outcome": "Philippines Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1639960",
+                "home_team": "St. Lucia",
+                "away_team": "Bermuda",
+                "predicted_outcome": "St. Lucia Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1642007",
+                "home_team": "Korea DPR W",
+                "away_team": "China W",
+                "predicted_outcome": "Korea DPR W Over 0.5 Team Goals"
+            },
+            {
+                "match_id": "1641080",
+                "home_team": "Botswana W",
+                "away_team": "Namibia W",
+                "predicted_outcome": "1st Half Over 0.5 Goals"
+            },
+            {
+                "match_id": "1639959",
+                "home_team": "St. Kitts and Nevis",
+                "away_team": "Grenada",
+                "predicted_outcome": "1st Half Over 0.5 Goals"
+            },
+            {
+                "match_id": "1640227",
+                "home_team": "Bangladesh Police",
+                "away_team": "City Club",
+                "predicted_outcome": "1st Half Over 0.5 Goals"
+            },
+            {
+                "match_id": "1603380",
+                "home_team": "Necaxa W",
+                "away_team": "Toluca W",
+                "predicted_outcome": "1st Half Over 0.5 Goals"
+            }
+        ],
+        "summary": {
+            "total": 20,
+            "won": 0,
+            "lost": 0,
+            "pending": 20
+        }
+    },
+    "2026-10-02": {
+        "matches": [
+            {
+                "match_id": "1520908",
+                "home_team": "Novorizontino",
+                "away_team": "Goias",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1619699",
+                "home_team": "Blooming",
+                "away_team": "Independiente Petrolero",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1490463",
+                "home_team": "Seattle Sounders",
+                "away_team": "Sporting Kansas City",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1641717",
+                "home_team": "Vietnam",
+                "away_team": "Pakistan",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1640101",
+                "home_team": "Chattogram",
+                "away_team": "Bangladesh Police",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1643209",
+                "home_team": "Zbrojovka Brno",
+                "away_team": "Skalica",
+                "predicted_outcome": "Over 0.5 HT Goals"
+            },
+            {
+                "match_id": "1637268",
+                "home_team": "Platense",
+                "away_team": "Estudiantes L.P.",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1639972",
+                "home_team": "Cayman Islands",
+                "away_team": "Puerto Rico",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1549849",
+                "home_team": "Internacional de Bogota",
+                "away_team": "Once Caldas",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1640106",
+                "home_team": "PWD Sports Club",
+                "away_team": "Brothers Union",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1642901",
+                "home_team": "Gornik Zabrze",
+                "away_team": "Odra Opole",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1642903",
+                "home_team": "Sudtirol",
+                "away_team": "Wacker Innsbruck",
+                "predicted_outcome": "Over 2.5 Goals"
+            },
+            {
+                "match_id": "1639973",
+                "home_team": "Dominican Republic",
+                "away_team": "Haiti",
+                "predicted_outcome": "Dominican Republic DNB"
+            },
+            {
+                "match_id": "1600617",
+                "home_team": "Inca Aruba",
+                "away_team": "Municipal Lime\u00f1o",
+                "predicted_outcome": "Inca Aruba Win"
+            },
+            {
+                "match_id": "1642902",
+                "home_team": "Saint Etienne",
+                "away_team": "FC Sion",
+                "predicted_outcome": "Saint Etienne DNB"
+            },
+            {
+                "match_id": "1639974",
+                "home_team": "Nicaragua",
+                "away_team": "Costa Rica",
+                "predicted_outcome": "Nicaragua DNB"
+            },
+            {
+                "match_id": "1640102",
+                "home_team": "Fakirerpool",
+                "away_team": "Mohammedan Dhaka",
+                "predicted_outcome": "BTTS Yes"
+            },
+            {
+                "match_id": "1642900",
+                "home_team": "Admira Wacker",
+                "away_team": "Austria Vienna",
+                "predicted_outcome": "Admira Wacker Win"
+            },
+            {
+                "match_id": "1641716",
+                "home_team": "Thailand",
+                "away_team": "Philippines",
+                "predicted_outcome": "Thailand Win"
+            },
+            {
+                "match_id": "1643166",
+                "home_team": "China W",
+                "away_team": "South Korea W",
+                "predicted_outcome": "China W Win"
+            }
+        ],
+        "summary": {
+            "total": 20,
+            "won": 0,
+            "lost": 0,
+            "pending": 20
+        }
+    }
+}

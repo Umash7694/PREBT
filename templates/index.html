@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PREBT - Deep AI Football Analysis</title>
+    <!-- Chart.js CDN for interactive pie charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: #1e293b; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        h2 { color: #38bdf8; text-align: center; margin-bottom: 20px; }
+        
+        .tabs { display: flex; gap: 10px; border-bottom: 2px solid #334155; padding-bottom: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: #334155; color: #94a3b8; cursor: pointer; font-size: 15px; font-weight: bold; border-radius: 6px; transition: 0.2s; }
+        .tab-btn.active { background: #0284c7; color: #ffffff; }
+        
+        .best-picks-container { background: #0284c71a; border: 2px solid #0284c7; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .best-picks-title { color: #facc15; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #0f172a; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #334155; }
+        th { background-color: #0284c7; color: white; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+        
+        tr.clickable-row { cursor: pointer; transition: background 0.2s; }
+        tr.clickable-row:hover { background-color: #334155 !important; }
+        
+        .sure-box { background-color: #facc15; color: #0f172a; font-weight: bold; border-radius: 4px; padding: 6px 12px; display: inline-block; box-shadow: 0 0 10px #facc15; }
+        .normal-box { background-color: #3b82f6; color: white; border-radius: 4px; padding: 6px 12px; display: inline-block; }
+        
+        .market-metrics { font-size: 11px; color: #94a3b8; margin-top: 4px; line-height: 1.4; }
+        tr.sure-row { background-color: rgba(250, 204, 21, 0.1); }
+
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); overflow: auto; }
+        .modal-content { background-color: #1e293b; margin: 4% auto; padding: 25px; border: 2px solid #38bdf8; border-radius: 12px; width: 85%; max-width: 900px; color: #f8fafc; }
+        .close-btn { color: #cbd5e1; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: #facc15; }
+        
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+        .stat-card { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; }
+        .stat-card h4 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+        
+        .chart-box { max-width: 280px; margin: 0 auto; }
+		
+		
+		
+		
+		/* Mobile & Tablet Responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px !important;
+    }
+
+    h1 {
+        font-size: 1.4rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Scrollable Day Tabs for Mobile */
+    .tabs {
+        display: flex !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch;
+        gap: 8px !important;
+        padding: 8px 5px !important;
+    }
+
+    .tab-btn {
+        flex: 0 0 auto !important;
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+    }
+
+    /* Responsive Data Tables */
+    table {
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+    }
+
+    th, td {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+    }
+
+    /* Modal / Popups adjustments */
+    .modal-content {
+        width: 92% !important;
+        padding: 15px !important;
+        margin: 10% auto !important;
+    }
+}
+		
+		
+	
+
+
+/* PC / Desktop View (Identical to your original styling) */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.main-title {
+    color: #ffffff !important; /* Preserves your exact white color */
+    font-size: 2rem;
+    margin: 0;
+}
+
+.history-btn {
+    background-color: #0284c7;
+    color: #ffffff !important;
+    padding: 6px 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* Mobile & Smartphone View ONLY */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column !important; /* Stacks button cleanly under title */
+        align-items: center !important;
+        gap: 10px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .main-title {
+        font-size: 1.3rem !important; /* Scaled slightly to fit 1 line on phone screens */
+        text-align: center !important;
+        white-space: nowrap !important;
+    }
+
+    .history-btn {
+        font-size: 13px !important;
+        padding: 6px 16px !important;
+    }
+}	
+		
+		
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-container">
+    <h1 class="main-title">PREBT Football Predictions</h1>
+    <a href="/history" class="history-btn">📜 View History</a>
+</div>
+    
+    <p style="text-align:center; color:#94a3b8; font-size:14px;">💡 Click on any match row to view deep AI statistical analysis, H2H record, and probability charts.</p>
+    
+   <div class="tabs" style="position: sticky; top: 0; z-index: 1000; background-color: #0f172a; padding: 12px 0; margin-bottom: 15px;">
+    <button class="tab-btn active" onclick="fetchDay(0, this)">Monday</button>
+    <button class="tab-btn" onclick="fetchDay(1, this)">Tuesday</button>
+    <button class="tab-btn" onclick="fetchDay(2, this)">Wednesday</button>
+    <button class="tab-btn" onclick="fetchDay(3, this)">Thursday</button>
+    <button class="tab-btn" onclick="fetchDay(4, this)">Friday</button>
+    <button class="tab-btn" onclick="fetchDay(5, this)">Saturday</button>
+    <button class="tab-btn" onclick="fetchDay(6, this)">Sunday</button>
+</div>
+    <div id="content">Loading match predictions...</div>
+</div>
+
+<!-- Modal Popup for Match Deep Dive -->
+<div id="matchModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalMatchTitle" style="text-align:left; color:#facc15; margin-top:0;"></h2>
+        
+        <div class="modal-grid">
+            <div class="stat-card">
+                <h4>📊 Win Probability Pie Chart</h4>
+                <div class="chart-box">
+                    <canvas id="probChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h4>⚔️ Head-To-Head & Team Strength</h4>
+                <p><strong>Calculated xG:</strong> <span id="modalXG"></span></p>
+                <p><strong>Attack Rating:</strong> <span id="modalAttack"></span></p>
+                <p><strong>Defense Rating:</strong> <span id="modalDefense"></span></p>
+                <p><strong>Last 6 Meetings:</strong> <span id="modalH2H"></span></p>
+            </div>
+        </div>
+
+        <div class="stat-card" style="margin-top:20px;">
+            <h4>🤖 AI Model System Analysis & Selection Reasoning</h4>
+            <p id="modalAINarrative" style="line-height:1.6; color:#cbd5e1; font-size:14px;"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentMatches = [];
+    let myChart = null;
+
+    async function fetchDay(offset, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const content = document.getElementById('content');
+        content.innerHTML = "<p style='text-align:center;'>Executing deep multi-market AI analysis...</p>";
+
+        try {
+            const res = await fetch(`/api/fixtures/${offset}`);
+            const data = await res.json();
+            currentMatches = data.matches || [];
+
+            let html = `<h3 style="color:#e2e8f0;">Date: ${data.date}</h3>`;
+
+            // Check if matches list is empty
+            if (!data.matches || data.matches.length === 0) {
+                html += `
+                    <div style="background: #0f172a; border: 1px solid #334155; padding: 40px; text-align: center; border-radius: 8px; margin-top: 15px;">
+                        <h3 style="color: #94a3b8; margin: 0 0 10px 0;">⚽ No Official Matches Scheduled</h3>
+                        <p style="color: #64748b; margin: 0;">There are no major league matches playing on this date via the API. Try selecting Saturday or Sunday!</p>
+                    </div>`;
+                content.innerHTML = html;
+                return;
+            }
+
+            // Render Best Picks if present
+            if (data.best_picks && data.best_picks.length > 0) {
+                html += `<div class="best-picks-container">
+                    <div class="best-picks-title">⭐ BEST PICKS (Highest Statistical Confidence)</div>
+                    <ul>`;
+                data.best_picks.forEach(p => {
+                    html += `<li><strong>${p.match}</strong> — Market: <span>${p.market}</span> | Pick: <span class="sure-box">${p.prediction}</span> | Confidence: <strong>${p.confidence}%</strong></li>`;
+                });
+                html += `</ul></div>`;
+            }
+
+            html += `<table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Match (Click for Stats)</th>
+                        <th>Target Market</th>
+                        <th>Top AI Prediction</th>
+                        <th>Confidence</th>
+                        <th>Full Market Breakdown & Summary</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            data.matches.forEach((m, idx) => {
+                const badgeClass = m.is_sure ? 'sure-box' : 'normal-box';
+                const rowClass = m.is_sure ? 'sure-row clickable-row' : 'clickable-row';
+                html += `
+                    <tr class="${rowClass}" onclick="openMatchModal(${idx})">
+                        <td>#${m.rank}</td>
+                        <td><strong>${m.match}</strong> 🔍</td>
+                        <td>${m.market}</td>
+                        <td><span class="${badgeClass}">${m.prediction}</span></td>
+                        <td><strong>${m.confidence}%</strong></td>
+                        <td>
+                            <div class="market-metrics">
+                                <strong>1X2:</strong> ${m.summary.full_time} | 
+                                <strong>O/U:</strong> ${m.summary.over_under} | 
+                                <strong>BTTS:</strong> ${m.summary.btts}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            content.innerHTML = html;
+        } catch (e) {
+            content.innerHTML = `<p style="color:#ef4444; text-align:center;">Error retrieving data.</p>`;
+        }
+    }
+
+    function openMatchModal(index) {
+        const item = currentMatches[index];
+        if (!item) return;
+        const stats = item.deep_stats;
+
+        document.getElementById('modalMatchTitle').innerText = item.match;
+        document.getElementById('modalXG').innerText = `${stats.home_team} (${stats.home_xg}) - ${stats.away_team} (${stats.away_xg})`;
+        document.getElementById('modalAttack').innerText = `${stats.home_team}: ${stats.home_attack} | ${stats.away_team}: ${stats.away_attack}`;
+        document.getElementById('modalDefense').innerText = `${stats.home_team}: ${stats.home_defense} | ${stats.away_team}: ${stats.away_defense}`;
+        document.getElementById('modalH2H').innerText = `${stats.home_team} ${stats.h2h.home_wins} Wins | ${stats.h2h.draws} Draws | ${stats.away_team} ${stats.h2h.away_wins} Wins`;
+        document.getElementById('modalAINarrative').innerText = stats.ai_narrative;
+
+        // Render Pie Chart
+        const ctx = document.getElementById('probChart').getContext('2d');
+        if (myChart) { myChart.destroy(); }
+
+        myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [`${stats.home_team} Win`, 'Draw', `${stats.away_team} Win`],
+                datasets: [{
+                    data: [stats.probabilities.home_win, stats.probabilities.draw, stats.probabilities.away_win],
+                    backgroundColor: ['#0284c7', '#64748b', '#e11d48']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#f8fafc' } }
+                }
+            }
+        });
+
+        document.getElementById('matchModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('matchModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('matchModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchDay(0, document.querySelectorAll('.tab-btn')[0]);
+    });
+</script>
+
+</body>
+</html>
