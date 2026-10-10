@@ -3,13 +3,15 @@ import sqlite3
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
 import requests
+from flask_apscheduler import APScheduler
 from history import record_daily_predictions, update_daily_results, load_history, save_history
 
 app = Flask(__name__)
 
-# --- API-FOOTBALL CONFIGURATION (Direct API-Sports) ---
-API_KEY = os.getenv("API_SPORTS_KEY", "c35e8ac803c5e6ff8e9b59248992c57a")
-FOOTBALL_API_URL = "https://v3.football.api-sports.io/fixtures"
+scheduler = APScheduler()
+
+# Sportscore Public API Configuration
+API_BASE_URL = "https://sportscore.com/api/v1/fixtures/"
 
 def init_db():
     conn = sqlite3.connect('database.db')
@@ -30,6 +32,37 @@ def init_db():
     conn.commit()
     conn.close()
 
+def fetch_scheduled_events(date_str):
+    params = {"date": date_str}
+    
+    try:
+        res = requests.get(API_BASE_URL, params=params, timeout=12)
+        print(f"API Request for {date_str} - Status: {res.status_code}")
+        
+        if res.status_code == 200:
+            data = res.json()
+            if isinstance(data, dict):
+                matches = data.get("matches", [])
+                print(f"Total Fixtures Returned: {len(matches)}")
+                return matches
+        else:
+            print(f"API Error {res.status_code}: {res.text}")
+    except Exception as e:
+        print(f"API Request Exception: {e}")
+        
+    return []
+
+def auto_update_all_pending_results():
+    with app.app_context():
+        today = datetime.now()
+        for i in range(4):
+            check_date = (today - timedelta(days=i)).strftime('%Y-%m-%d')
+            try:
+                live_matches = fetch_scheduled_events(check_date)
+                if live_matches:
+                    update_daily_results(check_date, live_matches)
+            except Exception as e:
+                print(f"Scheduler error updating {check_date}: {e}")
 
 def analyze_full_match_metrics(home_team, away_team, day_offset):
     seed = sum(ord(c) for c in home_team + away_team) + (day_offset * 17)
@@ -109,7 +142,6 @@ def analyze_full_match_metrics(home_team, away_team, day_offset):
 
     return top_pick['market'], top_pick['prediction'], top_pick['confidence'], ai_narrative, all_markets_summary, deep_stats
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -118,19 +150,24 @@ def index():
 def get_fixtures(day_offset):
     today = datetime.now()
     current_weekday = today.weekday()
-    days_difference = day_offset - current_weekday
-    sel_dt = today + timedelta(days=days_difference)
+    
+    if 0 <= day_offset <= 6:
+        days_difference = day_offset - current_weekday
+        sel_dt = today + timedelta(days=days_difference)
+    else:
+        sel_dt = today + timedelta(days=day_offset)
+        
     target_date = sel_dt.strftime('%Y-%m-%d')
-
-    # --- 1. CHECK CACHE FIRST ---
+    
+    # 1. CHECK LOCAL CACHE FIRST
     all_history = load_history()
-    if target_date in all_history and all_history[target_date].get('matches'):
+    if target_date in all_history and len(all_history[target_date].get('matches', [])) > 0:
         cached_matches = all_history[target_date]['matches']
         analyzed = []
         for item in cached_matches:
-            home = item.get('home_team', 'Home Team')
-            away = item.get('away_team', 'Away Team')
-            fixture_id = item.get('match_id', '0')
+            home = item.get('home_team', '')
+            away = item.get('away_team', '')
+            fixture_id = str(item.get('match_id', '0'))
             pred = item.get('predicted_outcome', '')
 
             market, _, conf, reason, summary, deep_stats = analyze_full_match_metrics(home, away, day_offset)
@@ -140,7 +177,7 @@ def get_fixtures(day_offset):
                 "home_team": home,
                 "away_team": away,
                 "market": market,
-                "prediction": pred if pred else "Over 0.5 HT Goals",
+                "prediction": pred,
                 "confidence": conf,
                 "is_sure": conf >= 82.0,
                 "key_reason": reason,
@@ -152,62 +189,42 @@ def get_fixtures(day_offset):
         for i, item in enumerate(analyzed, 1):
             item['rank'] = i
 
-        best_picks = [item for item in analyzed if item['is_sure']][:5]
         return jsonify({
             "date": target_date,
             "matches": analyzed,
-            "best_picks": best_picks
+            "best_picks": [m for m in analyzed if m['is_sure']][:5]
         })
 
-    # --- 2. FETCH FROM API IF NOT CACHED ---
-    headers = {"x-apisports-key": API_KEY}
-    raw_matches = []
-    
-    if API_KEY and API_KEY != "YOUR_API_KEY_HERE":
-        try:
-            res = requests.get(
-                f"{FOOTBALL_API_URL}?date={target_date}", 
-                headers=headers, 
-                timeout=8
-            )
-            print(f"API Response Code for {target_date}: {res.status_code}")
-            if res.status_code == 200:
-                data = res.json()
-                raw_matches = data.get('response', [])
-            else:
-                print(f"API Error Response: {res.text}")
-        except Exception as e:
-            print(f"API Fetch Error: {e}")
+    # 2. REAL-TIME API FETCH (Sportscore)
+    raw_events = fetch_scheduled_events(target_date)
 
     analyzed = []
-    for item in raw_matches[:20]:
-        teams = item.get('teams', {})
-        home = teams.get('home', {}).get('name', 'Home Team')
-        away = teams.get('away', {}).get('name', 'Away Team')
-        fixture_id = str(item.get('fixture', {}).get('id', '0'))
+    for item in raw_events:
+        home = item.get('home')
+        away = item.get('away')
+        fixture_id = str(item.get('id', '0'))
 
-        market, pred, conf, reason, summary, deep_stats = analyze_full_match_metrics(home, away, day_offset)
-        analyzed.append({
-            "match_id": fixture_id,
-            "match": f"{home} vs {away}",
-            "home_team": home,
-            "away_team": away,
-            "market": market,
-            "prediction": pred,
-            "confidence": conf,
-            "is_sure": conf >= 82.0,
-            "key_reason": reason,
-            "summary": summary,
-            "deep_stats": deep_stats
-        })
+        if home and away:
+            market, pred, conf, reason, summary, deep_stats = analyze_full_match_metrics(home, away, day_offset)
+            analyzed.append({
+                "match_id": fixture_id,
+                "match": f"{home} vs {away}",
+                "home_team": home,
+                "away_team": away,
+                "market": market,
+                "prediction": pred,
+                "confidence": conf,
+                "is_sure": conf >= 82.0,
+                "key_reason": reason,
+                "summary": summary,
+                "deep_stats": deep_stats
+            })
 
     analyzed.sort(key=lambda x: x['confidence'], reverse=True)
     for i, item in enumerate(analyzed, 1):
         item['rank'] = i
 
-    best_picks = [item for item in analyzed if item['is_sure']][:5]
-
-    # --- 3. SAVE TO LOCAL CACHE / HISTORY ---
+    # 3. SAVE TO HISTORY
     if analyzed:
         history_predictions = [
             {
@@ -223,8 +240,9 @@ def get_fixtures(day_offset):
     return jsonify({
         "date": target_date,
         "matches": analyzed,
-        "best_picks": best_picks
+        "best_picks": [m for m in analyzed if m['is_sure']][:5]
     })
+
 
 @app.route('/history')
 def history_page():
@@ -236,30 +254,28 @@ def history_page():
     
     selected_date = request.args.get('date', today.strftime('%Y-%m-%d'))
 
-    # Query API-Sports dynamically for the requested date if missing locally
-    if API_KEY and API_KEY != "YOUR_API_KEY_HERE":
-        headers = {"x-apisports-key": API_KEY}
-        try:
-            res = requests.get(
-                f"{FOOTBALL_API_URL}?date={selected_date}",
-                headers=headers,
-                timeout=8
-            )
-            if res.status_code == 200:
-                api_data = res.json()
-                live_matches = api_data.get('response', [])
+    # Query Sportscore dynamically for the requested date if missing locally
+    try:
+        res = requests.get(
+            "https://sportscore.com/api/v1/fixtures/",
+            params={"date": selected_date},
+            timeout=8
+        )
+        if res.status_code == 200:
+            api_data = res.json()
+            live_matches = api_data.get('matches', [])
+            
+            if selected_date not in all_history or not all_history[selected_date].get('matches'):
+                target_dt = datetime.strptime(selected_date, '%Y-%m-%d')
+                day_offset = target_dt.weekday()
                 
-                if selected_date not in all_history or not all_history[selected_date].get('matches'):
-                    target_dt = datetime.strptime(selected_date, '%Y-%m-%d')
-                    day_offset = target_dt.weekday()
+                fresh_predictions = []
+                for item in live_matches[:20]:
+                    home = item.get('home')
+                    away = item.get('away')
+                    fixture_id = str(item.get('id', '0'))
                     
-                    fresh_predictions = []
-                    for item in live_matches[:20]:
-                        teams = item.get('teams', {})
-                        home = teams.get('home', {}).get('name', 'Home Team')
-                        away = teams.get('away', {}).get('name', 'Away Team')
-                        fixture_id = str(item.get('fixture', {}).get('id', '0'))
-                        
+                    if home and away:
                         market, pred, conf, reason, summary, deep_stats = analyze_full_match_metrics(home, away, day_offset)
                         fresh_predictions.append({
                             "match_id": fixture_id,
@@ -267,15 +283,15 @@ def history_page():
                             "away_team": away,
                             "predicted_outcome": pred
                         })
-                    
-                    if fresh_predictions:
-                        record_daily_predictions(selected_date, fresh_predictions)
-                        all_history = load_history()
+                
+                if fresh_predictions:
+                    record_daily_predictions(selected_date, fresh_predictions)
+                    all_history = load_history()
 
-                update_daily_results(selected_date, live_matches)
-                all_history = load_history()
-        except Exception as e:
-            print(f"History update API error: {e}")
+            update_daily_results(selected_date, live_matches)
+            all_history = load_history()
+    except Exception as e:
+        print(f"History update API error: {e}")
 
     selected_day_data = all_history.get(selected_date, {"matches": [], "summary": {"total": 0, "won": 0, "lost": 0, "pending": 0}})
     
@@ -287,6 +303,17 @@ def history_page():
         week_dates=week_dates
     )
 
+
 if __name__ == '__main__':
     init_db()
+    
+    scheduler.add_job(
+        id='AutoUpdateScores', 
+        func=auto_update_all_pending_results, 
+        trigger='interval', 
+        minutes=10
+    )
+    scheduler.init_app(app)
+    scheduler.start()
+    
     app.run(debug=True, port=5000)
