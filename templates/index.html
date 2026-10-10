@@ -42,118 +42,113 @@
         .stat-card h4 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 8px; }
         
         .chart-box { max-width: 280px; margin: 0 auto; }
-		
-		
-		
-		
-		/* Mobile & Tablet Responsiveness */
-@media (max-width: 768px) {
-    body {
-        padding: 10px !important;
-    }
+        
+        /* Mobile & Tablet Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px !important;
+            }
 
-    h1 {
-        font-size: 1.4rem !important;
-        margin-bottom: 15px !important;
-    }
+            h1 {
+                font-size: 1.4rem !important;
+                margin-bottom: 15px !important;
+            }
 
-    /* Scrollable Day Tabs for Mobile */
-    .tabs {
-        display: flex !important;
-        overflow-x: auto !important;
-        white-space: nowrap !important;
-        -webkit-overflow-scrolling: touch;
-        gap: 8px !important;
-        padding: 8px 5px !important;
-    }
+            /* Scrollable Day Tabs for Mobile */
+            .tabs {
+                display: flex !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px !important;
+                padding: 8px 5px !important;
+            }
 
-    .tab-btn {
-        flex: 0 0 auto !important;
-        padding: 8px 14px !important;
-        font-size: 13px !important;
-    }
+            .tab-btn {
+                flex: 0 0 auto !important;
+                padding: 8px 14px !important;
+                font-size: 13px !important;
+            }
 
-    /* Responsive Data Tables */
-    table {
-        display: block !important;
-        overflow-x: auto !important;
-        white-space: nowrap !important;
-        width: 100% !important;
-    }
+            /* Responsive Data Tables */
+            table {
+                display: block !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                width: 100% !important;
+            }
 
-    th, td {
-        padding: 10px 12px !important;
-        font-size: 13px !important;
-    }
+            th, td {
+                padding: 10px 12px !important;
+                font-size: 13px !important;
+            }
 
-    /* Modal / Popups adjustments */
-    .modal-content {
-        width: 92% !important;
-        padding: 15px !important;
-        margin: 10% auto !important;
-    }
-}
-		
-		
-	
+            /* Modal / Popups adjustments */
+            .modal-content {
+                width: 92% !important;
+                padding: 15px !important;
+                margin: 10% auto !important;
+            }
+            
+            .modal-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
 
+        /* PC / Desktop View */
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-/* PC / Desktop View (Identical to your original styling) */
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 25px;
-}
+        .main-title {
+            color: #ffffff !important;
+            font-size: 2rem;
+            margin: 0;
+        }
 
-.main-title {
-    color: #ffffff !important; /* Preserves your exact white color */
-    font-size: 2rem;
-    margin: 0;
-}
+        .history-btn {
+            background-color: #0284c7;
+            color: #ffffff !important;
+            padding: 6px 14px;
+            font-size: 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
 
-.history-btn {
-    background-color: #0284c7;
-    color: #ffffff !important;
-    padding: 6px 14px;
-    font-size: 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    white-space: nowrap;
-}
+        /* Mobile Header View */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 10px !important;
+                margin-bottom: 15px !important;
+            }
 
-/* Mobile & Smartphone View ONLY */
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column !important; /* Stacks button cleanly under title */
-        align-items: center !important;
-        gap: 10px !important;
-        margin-bottom: 15px !important;
-    }
+            .main-title {
+                font-size: 1.3rem !important;
+                text-align: center !important;
+                white-space: nowrap !important;
+            }
 
-    .main-title {
-        font-size: 1.3rem !important; /* Scaled slightly to fit 1 line on phone screens */
-        text-align: center !important;
-        white-space: nowrap !important;
-    }
-
-    .history-btn {
-        font-size: 13px !important;
-        padding: 6px 16px !important;
-    }
-}	
-		
-		
+            .history-btn {
+                font-size: 13px !important;
+                padding: 6px 16px !important;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header-container">
-    <h1 class="main-title">PREBT Football Predictions</h1>
-    <a href="/history" class="history-btn">📜 View History</a>
-</div>
+        <h1 class="main-title">PREBT Football Predictions</h1>
+        <a href="/history" class="history-btn">📜 View History</a>
+    </div>
     
     <p style="text-align:center; color:#94a3b8; font-size:14px;">💡 Click on any match row to view deep AI statistical analysis, H2H record, and probability charts.</p>
     
@@ -217,7 +212,6 @@
 
             let html = `<h3 style="color:#e2e8f0;">Date: ${data.date}</h3>`;
 
-            // Check if matches list is empty
             if (!data.matches || data.matches.length === 0) {
                 html += `
                     <div style="background: #0f172a; border: 1px solid #334155; padding: 40px; text-align: center; border-radius: 8px; margin-top: 15px;">
@@ -228,7 +222,6 @@
                 return;
             }
 
-            // Render Best Picks if present
             if (data.best_picks && data.best_picks.length > 0) {
                 html += `<div class="best-picks-container">
                     <div class="best-picks-title">⭐ BEST PICKS (Highest Statistical Confidence)</div>
@@ -292,7 +285,7 @@
         document.getElementById('modalH2H').innerText = `${stats.home_team} ${stats.h2h.home_wins} Wins | ${stats.h2h.draws} Draws | ${stats.away_team} ${stats.h2h.away_wins} Wins`;
         document.getElementById('modalAINarrative').innerText = stats.ai_narrative;
 
-        // Render Pie Chart
+        // Render Pie Chart with mobile-optimized legend sizing
         const ctx = document.getElementById('probChart').getContext('2d');
         if (myChart) { myChart.destroy(); }
 
@@ -307,8 +300,17 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: {
-                    legend: { position: 'bottom', labels: { color: '#f8fafc' } }
+                    legend: { 
+                        position: 'bottom', 
+                        labels: { 
+                            color: '#f8fafc',
+                            boxWidth: 12,
+                            padding: 10,
+                            font: { size: 11 }
+                        } 
+                    }
                 }
             }
         });
